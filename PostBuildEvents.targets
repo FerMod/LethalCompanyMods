@@ -6,11 +6,6 @@
     <GameDirTargetsFile>GameDirectory.targets</GameDirTargetsFile>
     <GameDirTargetsFullPath>$(ProjectDir)$(GameDirTargetsFile)</GameDirTargetsFullPath>
   </PropertyGroup>
-  <ItemGroup>
-    <ThunderStoreItems Include="icon.png" />
-    <ThunderStoreItems Include="manifest.json" />
-    <ThunderStoreItems Include="README.md" />
-  </ItemGroup>
 
   <!-- Ensure the user (you!) has actually set everything up properly. -->
   <Target Name="EnsureGameDirectoryDefined" BeforeTargets="PrepareForBuild">
@@ -24,10 +19,6 @@
   <Import Project="$(ProjectDir)$(AssetTargetsFile)" Condition="Exists('$(ProjectDir)$(AssetTargetsFile)')"/>
   <!-- This import isn't actually optional, but making it conditional allows the user-friendly error task above to run. -->
   <Import Project="$(GameDirTargetsFullPath)" Condition="Exists('$(GameDirTargetsFullPath)')"/>
-  <!-- Ensure that the defined game directory path is valid. -->
-  <Target Name="EnsureGameDirectoryExists" AfterTargets="EnsureGameDirectoryDefined">
-    <Error Condition="!Exists('$(GameDirectory)')" Text="$(GameDirError)" />
-  </Target>
   <PropertyGroup>
     <!-- The mod directory to install our mod to. -->
     <ModDirectory>$(GameDirectory)\BepInEx\plugins\$(AssemblyName)</ModDirectory>
@@ -39,6 +30,7 @@
 
   <!-- Copy newly built files to the game directory. -->
   <Target Name="CopyToGameFolder" AfterTargets="Build">
+    <Message Importance="high" Text="No assets to be copied were defined in $(AssetTargetsFile). Proceeding without them." Condition="'@(Assets)' == ''"/>
     <Message Importance="high" Text="Copying files to game directory." />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ModDirectory)" />
     <Copy SourceFiles="@(Assets)" DestinationFolder="$(ModDirectory)\%(Assets.RelativeDir)"/>
@@ -60,7 +52,6 @@
     <Message Importance="normal" Text="Copying files to temporary directory." />
     <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(TempZipDir)\$(ZipStructure)" />
     <Copy SourceFiles="@(Assets)" DestinationFolder="$(TempZipDir)\$(ZipStructure)\%(Assets.RelativeDir)" />
-    <Copy SourceFiles="@(ThunderStoreItems)" DestinationFolder="$(TempZipDir)\$(ThunderStoreItems)" />
   </Target>
   <Target Name="CreateZip" AfterTargets="PrepareZip" Condition="$(Configuration.Contains('Release'))">
     <Message Importance="high" Text="Zipping project for distribution." />
