@@ -1,0 +1,9 @@
+{
+  "name": "Test",
+  "version_number": "0.0.1",
+  "website_url": "https://github.com/FerMod/LethalCompanyMods/tree/master/Test",
+  "description": "A mod for testing purposes.",
+  "dependencies": [
+    "BepInEx-BepInExPack-5.4.2100"
+  ]
+}
