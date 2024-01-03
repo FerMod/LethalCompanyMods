@@ -29,4 +29,12 @@
       <HintPath>$(GameDirectory)\Lethal Company_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
   </ItemGroup>
+
+  <!-- TODO: Add required files for projects.
+  <ItemGroup>
+    <Content Include="$(ProjectDir)\$(MSBuildProjectName).props" />
+  </ItemGroup>
+  -->
+
+  <Import Project="PostBuildEvents.targets" />
 </Project>
